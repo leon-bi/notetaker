@@ -11,7 +11,37 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.lightGreen,
     ),
-    home: const LoginView(),
+    home: const HomePage(),
   ));
 }
 
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Home Page"),
+      ),
+      body: FutureBuilder(
+          // initialize firebase before other calls to firebase
+          future: Firebase.initializeApp(
+              options: DefaultFirebaseOptions.currentPlatform),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                final user = FirebaseAuth.instance.currentUser;
+                if (user?.emailVerified ?? false) {
+                  print("You are verified");
+                } else {
+                  print("You need to verify your email first");
+                }
+                return const Text("Done");
+              default:
+                return const Text("Loading....");
+            }
+          }),
+    );
+  }
+}
