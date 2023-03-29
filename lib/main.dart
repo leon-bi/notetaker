@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:notetaker/firebase_options.dart';
 import 'package:notetaker/views/login_view.dart';
+import 'package:notetaker/views/register_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +12,10 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.lightGreen,
     ),
-    home: const HomePage(),
+    home: const HomePage(),routes: {
+      '/login/':(context) => const LoginView(),
+      '/register/':(context) => const RegisterView()
+    },
   ));
 }
 
@@ -20,11 +24,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home Page"),
-      ),
-      body: FutureBuilder(
+    return FutureBuilder(
           // initialize firebase before other calls to firebase
           future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform),
@@ -42,34 +42,9 @@ class HomePage extends StatelessWidget {
                 // }
                 return const LoginView();
               default:
-                return const Text("Loading....");
+                return const CircularProgressIndicator();
             }
-          }),
-    );
+          });
   }
 }
 
-class EmailVerificationView extends StatefulWidget {
-  const EmailVerificationView({super.key});
-
-  @override
-  State<EmailVerificationView> createState() => _EmailVerificationViewState();
-}
-
-class _EmailVerificationViewState extends State<EmailVerificationView> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text("Please verify your email address"),
-        TextButton(
-            onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              print(user);
-              await user?.sendEmailVerification();
-            },
-            child: const Text("Send Email Verification"))
-      ],
-    );
-  }
-}
