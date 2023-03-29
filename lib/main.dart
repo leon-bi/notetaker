@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:notetaker/firebase_options.dart';
 import 'package:notetaker/views/login_view.dart';
+import 'package:notetaker/views/notes_view.dart';
 import 'package:notetaker/views/register_view.dart';
 import 'package:notetaker/views/verify_email_view.dart';
 
@@ -37,14 +38,13 @@ class HomePage extends StatelessWidget {
 
               if (user != null) {
                 if (user.emailVerified) {
-                  print("Email Verified");
+                  return const NotesView();
                 } else {
                   return const VerifyEmailView();
                 }
               } else {
                 return const LoginView();
               }
-              return const Text("Done");
 
             default:
               return const CircularProgressIndicator();
