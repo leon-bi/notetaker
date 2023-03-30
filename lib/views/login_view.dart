@@ -61,12 +61,12 @@ class _LoginViewState extends State<LoginView> {
               final userCredential = await FirebaseAuth.instance
                   .signInWithEmailAndPassword(email: email, password: password);
     
-              print(userCredential);
+              devtools.log(userCredential.toString());
             } on FirebaseAuthException catch (e) {
               if (e.code == "user-not-found") {
-                print("user-not-found");
+                devtools.log("user-not-found");
               } else if (e.code == 'wrong-password') {
-                print("wrong-password");
+                devtools.log("wrong-password");
               }
             }
           },
