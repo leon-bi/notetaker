@@ -7,6 +7,8 @@ import 'package:notetaker/views/notes_view.dart';
 import 'package:notetaker/views/register_view.dart';
 import 'package:notetaker/views/verify_email_view.dart';
 
+import 'constants/routes.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
@@ -16,9 +18,9 @@ void main() {
     ),
     home: const HomePage(),
     routes: {
-      '/login/': (context) => const LoginView(),
-      '/register/': (context) => const RegisterView(),
-      '/notes/': (context) => const NotesView(),            
+      loginRout: (context) => const LoginView(),
+      registerRoute: (context) => const RegisterView(),
+      notesRoute: (context) => const NotesView(),            
     },
   ));
 }
