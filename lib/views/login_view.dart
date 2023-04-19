@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer'as devtools show log;
+import 'dart:developer' as devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -31,7 +31,10 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Login View'),),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login View'),
+      ),
       body: Column(children: [
         TextField(
           controller: _email,
@@ -53,15 +56,21 @@ class _LoginViewState extends State<LoginView> {
           child: const Text("Login"),
           onPressed: () async {
             // Getting Text from the email and password _contollers
-    
+
             try {
               final email = _email.text;
               final password = _password.text;
-    
-              final userCredential = await FirebaseAuth.instance
+
+              await FirebaseAuth.instance
                   .signInWithEmailAndPassword(email: email, password: password);
-    
-              devtools.log(userCredential.toString());
+
+              // devtools.log(userCredential.toString());
+              if (mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/notes/',
+                  (route) => false,
+                ); 
+              }
             } on FirebaseAuthException catch (e) {
               if (e.code == "user-not-found") {
                 devtools.log("user-not-found");
