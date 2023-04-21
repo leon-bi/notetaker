@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer'as devtools show log;
+import 'dart:developer' as devtools show log;
 
 import 'package:notetaker/constants/routes.dart';
 
+import '../utilities/show_error_dialogue.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -34,7 +35,10 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Register view'),),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Register view'),
+      ),
       body: Column(children: [
         TextField(
           controller: _email,
@@ -56,33 +60,33 @@ class _RegisterViewState extends State<RegisterView> {
           child: const Text("Register"),
           onPressed: () async {
             // Getting Text from the email and password _contollers
-    
+
             final email = _email.text;
             final password = _password.text;
-    
+
             try {
               final userCredential = await FirebaseAuth.instance
                   .createUserWithEmailAndPassword(
                       email: email, password: password);
-    
+
               devtools.log(userCredential.toString());
             } on FirebaseException catch (e) {
               if (e.code == "email-already-in-use") {
-                devtools.log("Email-already-in-use");
+                await showErrorDialog(context, 'Email-already-in-use');
               } else if (e.code == "weak-password") {
-                devtools.log("Weak-password");
+                await showErrorDialog(context, 'Weak Passowrd');
               } else if (e.code == "invalid-email") {
-                devtools.log("Invalid-email");
+                await showErrorDialog(context, 'Invalid Email');
               }
             }
           },
         ),
         TextButton(
-          onPressed: () {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(loginRout, (route) => false);
-          },
-          child: const Text("Already registered? Login here"))
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+            },
+            child: const Text("Already registered? Login here"))
       ]),
     );
   }
