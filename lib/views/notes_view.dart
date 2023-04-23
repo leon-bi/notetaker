@@ -11,7 +11,9 @@ class NotesView extends StatefulWidget {
   State<NotesView> createState() => _NotesViewState();
 }
 
-enum MenuAction { logout }
+enum MenuAction {
+  logout,
+}
 
 class _NotesViewState extends State<NotesView> {
   @override
@@ -24,22 +26,20 @@ class _NotesViewState extends State<NotesView> {
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
-                  final currentContext = context;
-
-                  final shouldLogout = await showLogoutDialog(currentContext);
+                  final shouldLogout = await showLogoutDialog(context);
                   devtools.log(shouldLogout.toString());
 
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
 
                     if (mounted) {
-                      await Navigator.of(currentContext)
-                          .pushNamedAndRemoveUntil(
-                              loginRoute, (route) => false);
+                      await Navigator.of(context).pushNamedAndRemoveUntil(
+                          loginRoute, (route) => false);
                     }
                   } else {
-                    devtools.log("something happened");
+                    devtools.log("user cancelled logout option");
                   }
+
                   break;
               }
             },
@@ -47,8 +47,8 @@ class _NotesViewState extends State<NotesView> {
               return const [
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text("logout"),
-                )
+                  child: Text("Logout"),
+                ),
               ];
             },
           )

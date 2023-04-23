@@ -59,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
           child: const Text("Login"),
           onPressed: () async {
             // Getting Text from the email and password _contollers
-
+            // We then try the Email and Passowrd if true we access the passwords and username from #Firebase and also create an instance
             try {
               final email = _email.text;
               final password = _password.text;
@@ -68,6 +68,7 @@ class _LoginViewState extends State<LoginView> {
                   .signInWithEmailAndPassword(email: email, password: password);
 
               // devtools.log(userCredential.toString());
+
               if (mounted) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   notesRoute,
