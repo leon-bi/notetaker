@@ -35,6 +35,7 @@ class FirebaseAuthProvider implements AuthProvider {
     } catch (_) {
       throw GenericAuthException();
     }
+    throw 'null';
   }
 
   @override
@@ -48,9 +49,31 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<AuthUser> logIn({required String email, required String password}) {
-    // TODO: implement logIn
-    throw UnimplementedError();
+  Future<AuthUser> logIn(
+      {required String email, required String password}) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = currentUser;
+      if (user != null) {
+        return user;
+      } else {
+        throw UserNotLoggedInAuthException();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        throw UserNotFoundAuthException(); // devtools.log("user-not-found");
+      } else if (e.code == 'wrong-password') {
+        throw WrongPasswordAuthException();
+      } else {
+        throw GenericAuthException();
+      }
+    } catch (e) {
+      throw GenericAuthException();
+    }
   }
 
   @override
@@ -60,8 +83,12 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<void> sendEmailVerification() {
-    // TODO: implement sendEmailVerification
-    throw UnimplementedError();
+  Future<void> sendEmailVerification() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.sendEmailVerification();
+    } else {
+      throw UserNotLoggedInAuthException();
+    }
   }
 }
