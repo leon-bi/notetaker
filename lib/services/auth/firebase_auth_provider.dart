@@ -1,8 +1,8 @@
 import 'package:notetaker/services/auth/auth_provider.dart';
+import 'package:notetaker/services/auth/auth_user.dart';
 import 'package:notetaker/services/auth/auth_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
-import 'package:notetaker/services/auth/auth_user.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
@@ -78,8 +78,14 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
+    // create a variable and assign the instance of current user
+    final user = FirebaseAuth.instance.currentUser;
+    // check if the user is not null
+    if (user != null) {
+      FirebaseAuth.instance.signOut();
+    }
+    // else log with the auth exception suitable
+    throw UserNotLoggedInAuthException();
   }
 
   @override
