@@ -69,7 +69,7 @@ class _RegisterViewState extends State<RegisterView> {
                 email: email,
                 password: password,
               );
-              AuthService.firebase().sendEmailVerification();
+              await AuthService.firebase().sendEmailVerification();
               if (mounted) {
                 Navigator.of(context).pushNamed(verifyEmailRoute);
               }
