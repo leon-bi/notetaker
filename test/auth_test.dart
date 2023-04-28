@@ -50,4 +50,11 @@ class MockAuthProvider implements AuthProvider {
     // TODO: implement sendEmailVerification
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> initialize() async {
+    //Fake making an API call i.e firebase in this case
+    await Future.delayed(const Duration(seconds: 1));
+    _isInitialized = true;
+  }
 }
