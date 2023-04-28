@@ -1,11 +1,16 @@
 import 'package:notetaker/services/auth/auth_provider.dart';
 import 'package:notetaker/services/auth/auth_user.dart';
+import 'package:notetaker/services/auth/firebase_auth_provider.dart';
 
 class AuthService implements AuthProvider {
   //property
   final AuthProvider provider;
   //constructor
   const AuthService(this.provider);
+
+  factory AuthService.firebase() => AuthService(
+        FirebaseAuthProvider(),
+      );
 
   @override
   Future<AuthUser> createUser({
@@ -25,7 +30,7 @@ class AuthService implements AuthProvider {
     required String email,
     required String password,
   }) =>
-      provider.createUser(
+      provider.logIn(
         email: email,
         password: password,
       );
@@ -35,4 +40,7 @@ class AuthService implements AuthProvider {
 
   @override
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
+
+  @override
+  Future<void> initialize() => provider.initialize();
 }
